@@ -1,0 +1,102 @@
+{% extends 'base.html' %}
+
+
+
+{% block content %}
+
+<div class="container my-5">
+    <h1 class="text-primary">{{blog.short_desc}}</h1>
+    <p class="text-muted fs-5">{{blog.content|safe}}</p>
+</div>
+
+<section id="comments" class="pb-5">
+    <div class="container">
+        <h1 class="text-center text-primary mb-4">Comments</h1>
+        
+        {% if user.is_authenticated %}
+        <form action="{% url 'Comment' %}" method="post" class="mb-5">
+            {% csrf_token %}
+            <input type="hidden" name="blogid" value="{{blog.id}}">
+            <textarea 
+                name="comment" 
+                rows="4" 
+                class="form-control border-primary shadow-sm mb-3" 
+                placeholder="Write your comment here..."></textarea>
+            <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+        {% endif %}
+        
+        {% for comment in comments %}
+        {% if blog.id == comment.blogparent.id%}
+        <div class="card w-75 mb-4 mx-auto shadow-sm">
+            <div class="card-body">
+                <div class="d-flex align-items-center mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" fill="currentColor" class="bi bi-person-circle me-3" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                    </svg>
+                    <strong class="fs-5">{{comment.name}}</strong>
+                </div>
+                <p class="card-text mb-3">{{comment.comment}}</p>
+                <button 
+                    class="btn btn-outline-primary" 
+                    type="button" 
+                    data-bs-toggle="collapse" 
+                    data-bs-target="#collapseExample{{comment.id}}" 
+                    aria-expanded="false" 
+                    aria-controls="collapseExample">
+                    Reply
+                </button>
+
+                <div class="collapse mt-3" id="collapseExample{{comment.id}}">
+                    <div class="card card-body">
+                        {% if user.is_authenticated %}
+                        <form action="{% url 'Reply' %}" method="post">
+                            {% csrf_token %}
+                            <input type="hidden" name="commentid" value="{{comment.id}}">
+                            <input type="hidden" name="blogid" value="{{blog.id}}">
+                            <textarea 
+                                name="reply" 
+                                rows="4" 
+                                class="form-control border-primary shadow-sm mb-3" 
+                                placeholder="Write your reply here..."></textarea>
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {% for rep in reply %}
+        {% if comment.id == rep.commentparent.id %}
+        <div class="card w-75 mb-4 mx-auto shadow-sm px-5">
+            <div class="card-body ">
+                <div class="d-flex align-items-center mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="46" height="46" fill="currentColor" class="bi bi-person-circle me-3" viewBox="0 0 16 16">
+                        <path d="M11 6a3 3 0 1 1-6 0 3 3 0 0 1 6 0"/>
+                        <path fill-rule="evenodd" d="M0 8a8 8 0 1 1 16 0A8 8 0 0 1 0 8m8-7a7 7 0 0 0-5.468 11.37C3.242 11.226 4.805 10 8 10s4.757 1.225 5.468 2.37A7 7 0 0 0 8 1"/>
+                    </svg>
+                    <strong class="fs-6">{{rep.name}}</strong>
+                </div>
+                <p class="card-text">{{rep.reply}}</p>
+            </div>
+        </div>
+        {% endif %}
+        {% endfor %}
+       
+        {% endif %}
+        {% endfor %}
+        
+        
+        
+    </div>
+</section>
+
+
+{% endblock %}
+<!-- {% for i in blog %}
+<div class="container">
+    <h1>{{ i.title }}</h1>
+</div>
+{% endfor %} -->

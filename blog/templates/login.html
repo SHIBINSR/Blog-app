@@ -1,0 +1,57 @@
+{% extends "base.html"%}
+
+{%  load static %}
+
+{% block content %}
+
+ 
+<div id="carouselExampleIndicators" class="carousel slide" data-bs-ride="carousel">
+  <div class="carousel-inner">
+      <div class="carousel-item active">
+          <img src="{% static 'suits-black.jpg' %}" class="d-block w-100" style="height: 500px; object-fit: cover;" alt="...">
+          <div class="carousel-caption d-none d-md-block bg-dark bg-opacity-50 rounded p-3">
+              <h5 class="text-white">Login</h5>
+          </div>
+      </div>
+  </div>
+
+  <div class="container pt-4 pb-4">
+      <form action="{% url 'Login' %}" method="post" class="bg-light p-4 rounded shadow-sm">
+          {% csrf_token %}
+          <h3 class="text-center text-primary mb-4">Login</h3>
+
+          <div class="mb-3">
+              <label for="exampleInputEmail1" class="form-label fw-semibold">Email address</label>
+              <input 
+                  type="email" 
+                  name="suemail" 
+                  class="form-control border-primary shadow-sm" 
+                  id="exampleInputEmail1" 
+                  placeholder="Enter your email"
+                  aria-describedby="emailHelp">
+          </div>
+
+          <div class="mb-3">
+              <label for="exampleInputPassword1" class="form-label fw-semibold">Password</label>
+              <input 
+                  type="password" 
+                  name="supassword" 
+                  class="form-control border-primary shadow-sm" 
+                  id="exampleInputPassword1" 
+                  placeholder="Enter your password">
+          </div>
+
+          <div class="text-center">
+              <button type="submit" class="btn btn-primary btn-lg px-5 shadow">Login</button>
+          </div>
+      </form>
+  </div>
+</div>
+
+
+
+
+
+   
+  
+{% endblock %}
