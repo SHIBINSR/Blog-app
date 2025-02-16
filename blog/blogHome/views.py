@@ -53,7 +53,7 @@ def Login(request):
             return redirect("Home")
         else:
             messages.warning(request, "Invalid credentials Try again.")
-            redirect("Login") 
+            return redirect("Login") 
     return render(request,"login.html")
 
 def Logout(request):
